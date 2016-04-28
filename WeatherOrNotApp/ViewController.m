@@ -22,7 +22,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    myWeather = [[Weather alloc]init];
 
     //Create manager and coder, set manager delegate
     self.manager = [[CLLocationManager alloc] init];
@@ -38,9 +37,12 @@
     
     
     self.myMapView.delegate = self;
+    
 }
 
 -(void) downloadWeather: (NSString*)searchZip {
+    
+    myWeather = [[Weather alloc]init];
     
     NSURL *url = [NSURL URLWithString:searchZip];
     
@@ -103,13 +105,26 @@
                     
                     
                     //NSLog(@"lat:%@ long:%@",myWeather.latitude, myWeather.longitude);
+                    //myWeather.main = [NSMutableDictionary dictionary];
                     
                     //NSLog(@"temperature:%@", temp);
                     for (NSDictionary *dict in [jsonDictionary objectForKey:@"weather"]) {
                         NSString *mainWeather = [dict objectForKey:@"main"];
                         NSString *weatherDescription = [dict objectForKey:@"description"];
-                        //NSString *lon = [dict objectForKey:@"lon"];
-                        NSLog(@"main weather:%@ description:%@",mainWeather, weatherDescription);
+                        
+                        [myWeather.mainWeather addObject:mainWeather];
+                        [myWeather.mainWeatherDescription addObject:weatherDescription];
+                        
+                        //myWeather.mainWeather = mainWeather;
+                        //myWeather.mainWeatherDescription = weatherDescription;
+                        
+                        //[myWeather.main setObject:mainWeather forKey:weatherDescription];
+                        
+                        [myWeather.main setObject:weatherDescription forKey:mainWeather];
+                        
+                        NSLog(@"weather:%@", myWeather.main);
+                        //NSLog(@"main weather:%@ description:%@",mainWeather, weatherDescription);
+                        
                         //                        NSLog(@"%@",pokemonName);
                         //[myPokemonArray addObject:pokemonName];
                     
@@ -147,18 +162,26 @@
 }
 - (void)setLabels {
     NSString *mySearchZip = _zipCodeLabel.text;
-    NSString *fTemperature = [NSString stringWithFormat:@"%f",[self getFahrenheit:myWeather.temparature]];
-    NSString *cTemperature = [NSString stringWithFormat:@"%f",[self getCelsius:myWeather.temparature]];
     
-    _weatherInfoFirstLine.text = [NSString stringWithFormat:@"%@ F/C:%@/%@ pressure:%@ humidity:%@",mySearchZip, fTemperature, cTemperature, myWeather.pressure, myWeather.humidity];
+    CLLocationDegrees lat = [myWeather.latitude doubleValue];
+    CLLocationDegrees lng = [myWeather.longitude doubleValue];
+
+    [self.myMapView setRegion:MKCoordinateRegionMake(CLLocationCoordinate2DMake(lat, lng), MKCoordinateSpanMake(0.1, 0.1))];
     
-    
-    
+    NSString *fTemperature = [NSString stringWithFormat:@"%.0f",[self getFahrenheit:myWeather.temparature]];
+    NSString *cTemperature = [NSString stringWithFormat:@"%.0f",[self getCelsius:myWeather.temparature]];
     
     NSString *sunriseHoursString = [NSDateFormatter localizedStringFromDate:myWeather.sunrise dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
     NSString *sunsetHoursString = [NSDateFormatter localizedStringFromDate:myWeather.sunset dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+    NSLog(@"mainweather:%@", myWeather.mainWeather);
+    NSLog(@"descriptionweather:%@", myWeather.mainWeatherDescription);
     
-    _weatherInfoSecondLine.text = [NSString stringWithFormat:@"sunrise:%@ sunset:%@", sunriseHoursString, sunsetHoursString];
+    
+    _weatherInfoFirstLine.text = [NSString stringWithFormat:@"%@℉:%@℃",fTemperature, cTemperature];
+    _weatherInfoFourthLine.text = [NSString stringWithFormat:@"sunrise:%@ a.m. sunset:%@ p.m.", sunriseHoursString, sunsetHoursString];
+    _weatherInfoThirdLine.text = [NSString stringWithFormat:@"pressure:%@ humidity:%@%%",myWeather.pressure, myWeather.humidity];
+    _weatherInfoSecondLine.text = [NSString stringWithFormat:@"%@:%@",[myWeather.mainWeather firstObject], [myWeather.mainWeatherDescription firstObject]];
+    _weatherInfoFifthLine.text = [NSString stringWithFormat:@"%@",mySearchZip];
 }
 - (IBAction)searchForWeather:(id)sender {
     NSString *mySearchZip = _zipCodeLabel.text;
@@ -190,4 +213,55 @@
     NSLog(@"My fahrenheit: %f", celsius);
     return celsius;
 }
+- (IBAction)getZipCode:(id)sender {
+    [self.manager startUpdatingLocation];
+    
+}
+- (void)locationManager:(CLLocationManager *)manager
+     didUpdateLocations:(NSArray<CLLocation *> *)locations {
+    [self.manager stopUpdatingLocation];
+    
+    CLLocation *myLocation = [locations lastObject];
+    
+    
+    [self.coder reverseGeocodeLocation:myLocation
+                     completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+                         
+                         if(!error){
+                             CLPlacemark *placeMark = [placemarks lastObject];
+                             NSLog(@"%@",placeMark.postalCode);
+                             //whereField.text = placeMark.postalCode;
+                             _zipCodeLabel.text = placeMark.postalCode;
+                             
+                             
+                             
+                         } else {
+                             NSLog(@"Error");
+                         }
+                     }];
+    
+    
+    
+    
+}
+/*
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
+    
+    CLLocationCoordinate2D coordinate = userLocation.location.coordinate;
+    
+    MKCoordinateSpan span;
+    span.latitudeDelta = 0.1;
+    span.longitudeDelta = 0.1;
+    
+    
+    MKCoordinateRegion region;
+    region.center = coordinate;
+    region.span = span;
+    
+    [self.myMapView setRegion:region];
+    
+    
+    
+}
+ */
 @end

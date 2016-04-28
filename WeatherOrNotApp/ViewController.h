@@ -15,6 +15,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *zipCodeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *weatherInfoFirstLine;
 @property (weak, nonatomic) IBOutlet UILabel *weatherInfoSecondLine;
+@property (weak, nonatomic) IBOutlet UILabel *weatherInfoThirdLine;
+@property (weak, nonatomic) IBOutlet UILabel *weatherInfoFourthLine;
+@property (weak, nonatomic) IBOutlet UILabel *weatherInfoFifthLine;
 
 - (IBAction)searchForWeather:(id)sender;
 

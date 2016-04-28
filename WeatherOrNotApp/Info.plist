@@ -18,8 +18,12 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>NSExtensionPointIdentifier</key>
+	<string>com.apple.widget-extension</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Current Location</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
