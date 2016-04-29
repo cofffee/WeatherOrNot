@@ -35,7 +35,7 @@
         [self.manager requestWhenInUseAuthorization];
     }
     
-    
+    //mapview delegate
     self.myMapView.delegate = self;
     
 }
@@ -76,20 +76,7 @@
                     NSString *windSpeed = [[jsonDictionary objectForKey:@"wind"] objectForKey:@"speed"];
                     NSString *windDegrees = [[jsonDictionary objectForKey:@"wind"] objectForKey:@"degrees"];
 
-/*
-                    NSString *sunsetShortStyle = [NSDateFormatter localizedStringFromDate:sunset dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle];
-                    NSString *sunsetLongStyle = [NSDateFormatter localizedStringFromDate:sunset dateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterFullStyle];
-                    NSString *sunsetNoStyle = [NSDateFormatter localizedStringFromDate:sunset dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterFullStyle];
-                    NSString *sunsetMediumStyle = [NSDateFormatter localizedStringFromDate:sunset dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterFullStyle];
-                    NSString *sunsetFullStyle = [NSDateFormatter localizedStringFromDate:sunset dateStyle:NSDateFormatterFullStyle timeStyle:NSDateFormatterFullStyle];
 
-                    NSLog(@"full style: %@",sunsetFullStyle);
-                    NSLog(@"short style: %@",sunsetShortStyle);
-                    NSLog(@"long style: %@", sunsetLongStyle);
-                    NSLog(@"no style: %@", sunsetNoStyle);
-                    NSLog(@"medium style: %@", sunsetMediumStyle);
- */
-//                    NSLog(@"sunrise:%@ sunset:%@",sunrise, sunset);
                     
                     myWeather.latitude = lat;
                     myWeather.longitude = lon;
@@ -122,14 +109,11 @@
                         
                         [myWeather.main setObject:weatherDescription forKey:mainWeather];
                         
-                        NSLog(@"weather:%@", myWeather.main);
-                        //NSLog(@"main weather:%@ description:%@",mainWeather, weatherDescription);
+                        //NSLog(@"weather:%@", myWeather.main);
                         
-                        //                        NSLog(@"%@",pokemonName);
-                        //[myPokemonArray addObject:pokemonName];
                     
                     }
-                    //[self setLabels];
+                    //[self performSelectorOnMainThread:@selector(getCity) withObject:nil waitUntilDone:YES];
                     [self performSelectorOnMainThread:@selector(setLabels) withObject:nil waitUntilDone:YES];
                     //NSLog(@"%@", jsonDictionary);
                 } else {
@@ -147,6 +131,7 @@
     }];
     
     [dataTask resume];
+    
     //nextURL = [jsonDictionary objectForKey:@"next"];
     
     
@@ -161,60 +146,81 @@
     NSLog(@"Broken Session!");
 }
 - (void)setLabels {
+    //[self performSelectorOnMainThread:@selector(getCity) withObject:nil waitUntilDone:YES];
+    [self getCity];
     NSString *mySearchZip = _zipCodeLabel.text;
     
     CLLocationDegrees lat = [myWeather.latitude doubleValue];
     CLLocationDegrees lng = [myWeather.longitude doubleValue];
-
-    [self.myMapView setRegion:MKCoordinateRegionMake(CLLocationCoordinate2DMake(lat, lng), MKCoordinateSpanMake(0.1, 0.1))];
+    
+    [self.myMapView setRegion:MKCoordinateRegionMake(CLLocationCoordinate2DMake(lat, lng), MKCoordinateSpanMake(1.0, 1.0))];
     
     NSString *fTemperature = [NSString stringWithFormat:@"%.0f",[self getFahrenheit:myWeather.temparature]];
     NSString *cTemperature = [NSString stringWithFormat:@"%.0f",[self getCelsius:myWeather.temparature]];
     
+    NSString *fMinTemperature = [NSString stringWithFormat:@"%.0f",[self getFahrenheit:myWeather.minimumTemparature]];
+    NSString *fMaxTemperature = [NSString stringWithFormat:@"%.0f",[self getFahrenheit:myWeather.maximumTemparature]];
+    
     NSString *sunriseHoursString = [NSDateFormatter localizedStringFromDate:myWeather.sunrise dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
     NSString *sunsetHoursString = [NSDateFormatter localizedStringFromDate:myWeather.sunset dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
-    NSLog(@"mainweather:%@", myWeather.mainWeather);
-    NSLog(@"descriptionweather:%@", myWeather.mainWeatherDescription);
     
     
-    _weatherInfoFirstLine.text = [NSString stringWithFormat:@"%@℉:%@℃",fTemperature, cTemperature];
+    _weatherInfoFirstLine.text = [NSString stringWithFormat:@"%@℉",fTemperature];
     _weatherInfoFourthLine.text = [NSString stringWithFormat:@"sunrise:%@ a.m. sunset:%@ p.m.", sunriseHoursString, sunsetHoursString];
-    _weatherInfoThirdLine.text = [NSString stringWithFormat:@"pressure:%@ humidity:%@%%",myWeather.pressure, myWeather.humidity];
+    _weatherInfoThirdLine.text = [NSString stringWithFormat:@"pressure:%@hPa humidity:%@%% %@/%@℉",myWeather.pressure, myWeather.humidity, fMinTemperature, fMaxTemperature];
     _weatherInfoSecondLine.text = [NSString stringWithFormat:@"%@:%@",[myWeather.mainWeather firstObject], [myWeather.mainWeatherDescription firstObject]];
-    _weatherInfoFifthLine.text = [NSString stringWithFormat:@"%@",mySearchZip];
+    _weatherInfoFifthLine.text = [NSString stringWithFormat:@"%@",myWeather.city];
 }
 - (IBAction)searchForWeather:(id)sender {
     NSString *mySearchZip = _zipCodeLabel.text;
     NSLog(@"%@",mySearchZip);
-    _weatherInfoFirstLine.text = @"Here's the weather, cheerio";
-    _weatherInfoSecondLine.text = @"and eers some mo'!";
+    _weatherInfoFifthLine.text = @"*";
+    _weatherInfoFirstLine.text = @"**";
+    _weatherInfoSecondLine.text = @"***";
+    _weatherInfoThirdLine.text = @"****";
+    _weatherInfoFourthLine.text = @"*****";
     stringURL = [NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/weather?zip=%@,us&appid=9575400c8412cb658faf53b4a3f44f82", mySearchZip];
     [self downloadWeather:stringURL];
 }
 - (double) getFahrenheit: (NSString*)kelvin {
-    
     double fahrenheit = [kelvin doubleValue];
-    NSLog(@"My fahrenheit: %f", fahrenheit);
     double constant = 459.67;
     double ratio = 9.0/5.0;
     fahrenheit = (fahrenheit * ratio) - constant;
-    NSLog(@"My constant:%f ratio:%f fahrenheit:%f", constant, ratio, fahrenheit);
-    NSLog(@"My fahrenheit: %f", fahrenheit);
+
     return fahrenheit;
 }
 - (double) getCelsius: (NSString*)kelvin {
-    
     double celsius = [kelvin doubleValue];
-    NSLog(@"My fahrenheit: %f", celsius);
     double constant = 273.15;
-    
     celsius = celsius - constant;
-    NSLog(@"My constant:%f fahrenheit:%f", constant, celsius);
-    NSLog(@"My fahrenheit: %f", celsius);
+    
     return celsius;
 }
 - (IBAction)getZipCode:(id)sender {
     [self.manager startUpdatingLocation];
+}
+-(void) getCity{
+    CLLocationDegrees lat = [myWeather.latitude doubleValue];
+    CLLocationDegrees lng = [myWeather.longitude doubleValue];
+    CLLocation *location = [[CLLocation alloc]initWithLatitude:lat longitude:lng];
+    
+    [self.coder reverseGeocodeLocation:location
+                     completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+                         
+                         if(!error){
+                             CLPlacemark *placeMark = [placemarks lastObject];
+                             NSLog(@"%@",placeMark.postalCode);
+                             NSLog(@"%@",placeMark.locality);
+                             myWeather.city = placeMark.locality;
+
+                            _weatherInfoFifthLine.text = [NSString stringWithFormat:@"%@,%@",myWeather.city, placeMark.administrativeArea];
+                             
+                         } else {
+                             NSLog(@"Error");
+                         }
+                     }];
+
     
 }
 - (void)locationManager:(CLLocationManager *)manager
@@ -223,13 +229,14 @@
     
     CLLocation *myLocation = [locations lastObject];
     
-    
     [self.coder reverseGeocodeLocation:myLocation
                      completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
                          
                          if(!error){
                              CLPlacemark *placeMark = [placemarks lastObject];
                              NSLog(@"%@",placeMark.postalCode);
+                             NSLog(@"%@",placeMark.locality);
+                             
                              //whereField.text = placeMark.postalCode;
                              _zipCodeLabel.text = placeMark.postalCode;
                              
@@ -263,5 +270,29 @@
     
     
 }
+ */
+
+/*  -DATE PRINTING FORMATS-
+ NSString *sunsetShortStyle = [NSDateFormatter localizedStringFromDate:sunset dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle];
+ NSString *sunsetLongStyle = [NSDateFormatter localizedStringFromDate:sunset dateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterFullStyle];
+ NSString *sunsetNoStyle = [NSDateFormatter localizedStringFromDate:sunset dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterFullStyle];
+ NSString *sunsetMediumStyle = [NSDateFormatter localizedStringFromDate:sunset dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterFullStyle];
+ NSString *sunsetFullStyle = [NSDateFormatter localizedStringFromDate:sunset dateStyle:NSDateFormatterFullStyle timeStyle:NSDateFormatterFullStyle];
+ 
+ NSLog(@"full style: %@",sunsetFullStyle);
+ NSLog(@"short style: %@",sunsetShortStyle);
+ NSLog(@"long style: %@", sunsetLongStyle);
+ NSLog(@"no style: %@", sunsetNoStyle);
+ NSLog(@"medium style: %@", sunsetMediumStyle);
+ */
+
+/*  -GCD FOR ANY OCCASSION-
+                  NSLog(@"sunrise:%@ sunset:%@",sunrise, sunset);
+
+                             dispatch_async(dispatch_get_main_queue(), ^{
+                                 NSLog(@"inside dispatch async block main thread from main thread");
+                                 myWeather.city = placeMark.locality;
+
+                             });
  */
 @end

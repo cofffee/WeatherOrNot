@@ -11,6 +11,8 @@
 @interface Weather : NSObject
 @property (nonatomic, weak) NSString *longitude;
 @property (nonatomic, weak) NSString *latitude;
+@property (nonatomic, weak) NSString *city;
+
 @property(nonatomic) NSMutableDictionary *main;
 @property (nonatomic) NSMutableArray *mainWeather;
 @property (nonatomic) NSMutableArray *mainWeatherDescription;
