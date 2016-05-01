@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
+#import "SWRevealViewController.h"
 
 @interface ViewController : UIViewController <CLLocationManagerDelegate, MKMapViewDelegate>
 
@@ -20,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *weatherInfoFifthLine;
 
 - (IBAction)searchForWeather:(id)sender;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *barButton;
 
 @property (nonatomic, strong) CLLocationManager *manager;
 @property (nonatomic, strong) CLGeocoder *coder;

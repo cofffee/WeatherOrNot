@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="F7i-Ms-Fxx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MMh-5n-1xW">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -101,9 +101,10 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Weather Or Not" id="tca-L4-WGG">
-                        <barButtonItem key="leftBarButtonItem" title="➽" id="Pbs-Rg-OY5"/>
+                        <barButtonItem key="leftBarButtonItem" title="DD" id="Pbs-Rg-OY5"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="barButton" destination="Pbs-Rg-OY5" id="gXx-FE-MaG"/>
                         <outlet property="myMapView" destination="G5n-MI-qSn" id="qjc-ob-fnV"/>
                         <outlet property="weatherInfoFifthLine" destination="XzG-vK-IpY" id="b2g-t9-7LC"/>
                         <outlet property="weatherInfoFirstLine" destination="gJe-6B-bHc" id="baC-su-rRV"/>
@@ -117,23 +118,55 @@
             </objects>
             <point key="canvasLocation" x="1117" y="387"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="5Zm-Au-pKs">
+        <!--Navigation Table View Controller-->
+        <scene sceneID="S3X-YF-FIF">
             <objects>
-                <viewController id="nmG-aC-jmZ" sceneMemberID="viewController">
+                <tableViewController id="r1z-af-X1C" customClass="NavigationTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="Xai-QP-3Hb">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="r4k-ey-sEz">
+                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="r4k-ey-sEz" id="H46-S8-rE1">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="r1z-af-X1C" id="xPK-u8-Irc"/>
+                            <outlet property="delegate" destination="r1z-af-X1C" id="aDw-0J-uM1"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cZu-cR-LFe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="296" y="-300"/>
+        </scene>
+        <!--Reveal View Controller-->
+        <scene sceneID="HYy-tO-Imo">
+            <objects>
+                <viewController id="MMh-5n-1xW" customClass="SWRevealViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="3fp-oY-ZbY"/>
-                        <viewControllerLayoutGuide type="bottom" id="4Rd-WG-XwY"/>
+                        <viewControllerLayoutGuide type="top" id="yhd-2M-Q26"/>
+                        <viewControllerLayoutGuide type="bottom" id="BSM-A4-XlF"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="VMj-rk-98p">
+                    <view key="view" contentMode="scaleToFill" id="5gF-Do-WDO">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <segue destination="F7i-Ms-Fxx" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegue" id="g7Z-r0-1jd"/>
+                        <segue destination="r1z-af-X1C" kind="custom" identifier="sw_rear" customClass="SWRevealViewControllerSegue" id="Zhx-K9-RDr"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="OWZ-RX-yoW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8vM-QH-FrG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-405" y="387"/>
+            <point key="canvasLocation" x="-440" y="393"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="SPw-5N-ih4">

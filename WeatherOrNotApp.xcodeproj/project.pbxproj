@@ -57,6 +57,8 @@
 		A609BEEB1CD2ADA7007FD405 /* tornado-25.png in Resources */ = {isa = PBXBuildFile; fileRef = A609BEBA1CD2ADA7007FD405 /* tornado-25.png */; };
 		A609BEEC1CD2ADA7007FD405 /* wet-25.png in Resources */ = {isa = PBXBuildFile; fileRef = A609BEBB1CD2ADA7007FD405 /* wet-25.png */; };
 		A609BEED1CD2ADA7007FD405 /* wet-25.png in Resources */ = {isa = PBXBuildFile; fileRef = A609BEBB1CD2ADA7007FD405 /* wet-25.png */; };
+		A609BEFA1CD3CD94007FD405 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A609BEF91CD3CD94007FD405 /* SWRevealViewController.m */; };
+		A609BEFD1CD3D05C007FD405 /* NavigationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A609BEFC1CD3D05C007FD405 /* NavigationTableViewController.m */; };
 		A679C99D1CCB0CE300E5DC62 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A679C99C1CCB0CE300E5DC62 /* main.m */; };
 		A679C9A01CCB0CE300E5DC62 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A679C99F1CCB0CE300E5DC62 /* AppDelegate.m */; };
 		A679C9A31CCB0CE300E5DC62 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A679C9A21CCB0CE300E5DC62 /* ViewController.m */; };
@@ -123,6 +125,10 @@
 		A609BEB91CD2ADA7007FD405 /* sunset-25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sunset-25.png"; sourceTree = "<group>"; };
 		A609BEBA1CD2ADA7007FD405 /* tornado-25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tornado-25.png"; sourceTree = "<group>"; };
 		A609BEBB1CD2ADA7007FD405 /* wet-25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wet-25.png"; sourceTree = "<group>"; };
+		A609BEF81CD3CD94007FD405 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		A609BEF91CD3CD94007FD405 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		A609BEFB1CD3D05C007FD405 /* NavigationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NavigationTableViewController.h; sourceTree = "<group>"; };
+		A609BEFC1CD3D05C007FD405 /* NavigationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NavigationTableViewController.m; sourceTree = "<group>"; };
 		A679C9981CCB0CE300E5DC62 /* WeatherOrNotApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherOrNotApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A679C99C1CCB0CE300E5DC62 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A679C99E1CCB0CE300E5DC62 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -199,6 +205,17 @@
 			path = Weather;
 			sourceTree = "<group>";
 		};
+		A609BEFE1CD3D377007FD405 /* DrawerViewFiles */ = {
+			isa = PBXGroup;
+			children = (
+				A609BEFB1CD3D05C007FD405 /* NavigationTableViewController.h */,
+				A609BEFC1CD3D05C007FD405 /* NavigationTableViewController.m */,
+				A609BEF81CD3CD94007FD405 /* SWRevealViewController.h */,
+				A609BEF91CD3CD94007FD405 /* SWRevealViewController.m */,
+			);
+			name = DrawerViewFiles;
+			sourceTree = "<group>";
+		};
 		A679C98F1CCB0CE200E5DC62 = {
 			isa = PBXGroup;
 			children = (
@@ -222,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				A679C9D51CD004C900E5DC62 /* WeatherOrNotApp.entitlements */,
+				A609BEFE1CD3D377007FD405 /* DrawerViewFiles */,
 				A679C9BB1CCB0FF600E5DC62 /* WeatherObjectModel */,
 				A679C9B71CCB0D3100E5DC62 /* AppDelegate */,
 				A679C9B61CCB0D0E00E5DC62 /* ViewController */,
@@ -464,11 +482,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A609BEFD1CD3D05C007FD405 /* NavigationTableViewController.m in Sources */,
 				A679C9A31CCB0CE300E5DC62 /* ViewController.m in Sources */,
 				A679C9A01CCB0CE300E5DC62 /* AppDelegate.m in Sources */,
 				A679C99D1CCB0CE300E5DC62 /* main.m in Sources */,
 				A679C9A91CCB0CE300E5DC62 /* WeatherOrNotApp.xcdatamodeld in Sources */,
 				A679C9BA1CCB0FEF00E5DC62 /* Weather.m in Sources */,
+				A609BEFA1CD3CD94007FD405 /* SWRevealViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

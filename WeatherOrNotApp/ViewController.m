@@ -38,6 +38,13 @@
     //mapview delegate
     self.myMapView.delegate = self;
     
+    _barButton.target = self.revealViewController;
+    _barButton.action = @selector(revealToggle:);
+    //    [self.view ]
+    
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    [self.view addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
+    
 }
 
 -(void) downloadWeather: (NSString*)searchZip {
